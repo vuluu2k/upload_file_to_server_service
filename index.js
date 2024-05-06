@@ -9,11 +9,12 @@ app.use('/contents', express.static(path.join(__dirname, "contents")));
 
 app.post("/upload", upload.single("file"), (req, res) => {
   const file = req.file;
+  const host = req.protocol + "://" + req.get("host");
   res.status(200).json({
     success: true,
     message: "File uploaded successfully!",
     filename: file.filename,
-    path: file.path,
+    path: path.join(host, file.path),
     mimetype: file.mimetype,
     size: file.size,
     fieldname: file.fieldname,
