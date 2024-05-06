@@ -1,13 +1,13 @@
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const app = express();
 const port = 3000;
 
 const upload = require("./utils/upload");
-const protocol = process.env.PROTOCOL || "http";
+const protocol = process.env.ENV == "prod" ? "https" : "http";
 
-app.use('/contents', express.static(path.join(__dirname, "contents")));
+app.use("/contents", express.static(path.join(__dirname, "contents")));
 
 app.post("/upload", upload.single("file"), (req, res) => {
   const file = req.file;
