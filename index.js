@@ -1,20 +1,22 @@
+require('dotenv').config();
 const express = require("express");
 const path = require("path");
 const app = express();
 const port = 3000;
 
 const upload = require("./utils/upload");
+const protocol = process.env.PROTOCOL || "http";
 
 app.use('/contents', express.static(path.join(__dirname, "contents")));
 
 app.post("/upload", upload.single("file"), (req, res) => {
   const file = req.file;
-  const host = req.protocol + "://" + req.get("host");
+  const host = req.get("host");
   res.status(200).json({
     success: true,
     message: "File uploaded successfully!",
     filename: file.filename,
-    path: path.join(host, file.path),
+    path: `${protocol}://${host}/${file.path}`,
     mimetype: file.mimetype,
     size: file.size,
     fieldname: file.fieldname,
